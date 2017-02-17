@@ -4,15 +4,16 @@
 
 /* creates new object using class as reference */
 void *new(const void * _class, ...)
-{	const struct Class * class = _class;
-	void * p = calloc(1, class -> size);
+{
+	const struct Class *class = _class;
+	va_list ap;
+	void * p = calloc(1, class->size);
 
 	assert(p);
-	* (const struct Class **) p = class;
+	*(const struct Class **)p = class;
 
-	if (class -> ctor)
-	{	va_list ap;
-
+	if (class->ctor)
+	{
 		va_start(ap, _class);
 		p = class -> ctor(p, & ap);
 		va_end(ap);
@@ -22,7 +23,8 @@ void *new(const void * _class, ...)
 
 /* calls the destructor, frees object */
 void delete(void *self)
-{	const struct Class ** cp = self;
+{
+	const struct Class **cp = self;
 
 	if (self && * cp && (*cp)->dtor)
 		self = (*cp)->dtor(self);
@@ -30,25 +32,28 @@ void delete(void *self)
 }
 
 /* returns a call to a cloning function on the obj */
-void *clone(const void * self)
-{	const struct Class * const * cp = self;
+void *clone(const void *self)
+{
+	const struct Class * const *cp = self;
 
-	assert(self && * cp && (* cp) -> clone);
+	assert(self && * cp && (*cp) -> clone);
 	return (* cp) -> clone(self);
 }
 
 /* compares current obj and other data */
-int differ (const void * self, const void * b)
-{	const struct Class * const * cp = self;
+int differ(const void *self, const void *b)
+{
+	const struct Class * const *cp = self;
 
-	assert(self && * cp && (* cp) -> differ);
-	return (* cp) -> differ(self, b);
+	assert(self && * cp && (*cp)->differ);
+	return (*cp)->differ(self, b);
 }
 
 /* returns the size of the current object */
-size_t sizeOf (const void * self)
-{	const struct Class * const * cp = self;
+size_t sizeOf(const void *self)
+{
+	const struct Class * const *cp = self;
 
-	assert(self && * cp);
-	return (* cp) -> size;
+	assert(self && *cp);
+	return (*cp)->size;
 }

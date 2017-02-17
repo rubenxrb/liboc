@@ -1,6 +1,6 @@
 NAME = liboc.a
 SDIR	= ./sources/
-SRCS		= bag.c	\
+SRCS		= \
 		string.c	\
 		new.c		\
 

@@ -5,9 +5,10 @@
 #include "new.h"
 
 /* declaring String data type */
-struct String {
-	const void * class;	/* must be first */
-	char * text; /* heap text */
+struct String
+{
+	const void *class;	/* must be first */
+	char *text; /* heap text */
 };
 
 /* String object constructor - returns heap obj */
